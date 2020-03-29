@@ -51,45 +51,15 @@ class TabbedAppBarSample extends StatelessWidget {
               }).toList(),
             ),
           ),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Center(
-                child: Text(
-                  "DATAmove.org [appBar.body.Column.Center.Text]",
-                  style: TextStyle(
-                      fontSize: 27.0,
-                      color: const Color(0xFF000000),
-                      fontWeight: FontWeight.w200,
-                      fontFamily: "Roboto"),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Center(
-                child: Text(
-                  "the transition company [appBar.body.Column.Center.Text]",
-                  style: TextStyle(
-                      fontSize: 12.0,
-                      color: const Color(0xFF000000),
-                      fontWeight: FontWeight.w200,
-                      fontFamily: "Roboto"),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              TabBarView(
-                children: <Widget>[
-                  Center(child: Text(Choice(title: 'CAR', icon: Icons.directions_car).title)),
-                  Center(child: Text(Choice(title: 'BICYCLE', icon: Icons.directions_bike).title)),
-                  Center(child: Text(Choice(title: 'BOAT', icon: Icons.directions_boat).title)),
-                  Center(child: Text(Choice(title: 'BUS', icon: Icons.directions_bus).title)),
-                  Center(child: Text(Choice(title: 'TRAIN', icon: Icons.directions_railway).title)),
-                  Center(child: Text(Choice(title: 'WALK', icon: Icons.directions_walk).title)),
-                ],
-              ),
-            ],
+          body: TabBarView(
+            children: choices.map((Choice choice) {
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ChoiceCard(choice: choice),
+              );
+            }).toList(),
           ),
+
         ),
       ),
     );
@@ -97,38 +67,51 @@ class TabbedAppBarSample extends StatelessWidget {
 }
 
 class Choice {
-  const Choice({this.title, this.icon});
+  const Choice({this.title, this.icon, this.testTitle2});
 
   final String title;
   final IconData icon;
+  final String testTitle2; // as TEST by Andy
 }
 
 const List<Choice> choices = const <Choice>[
-  const Choice(title: 'CAR', icon: Icons.directions_car),
-  const Choice(title: 'BICYCLE', icon: Icons.directions_bike),
-  const Choice(title: 'BOAT', icon: Icons.directions_boat),
+  const Choice(title: 'CAR', icon: Icons.directions_car, testTitle2: 'testTitle "CAR"'),
+  const Choice(title: 'BICYCLE', icon: Icons.directions_bike, testTitle2: 'testTitle "BICYCLE"'),
+/*  const Choice(title: 'BOAT', icon: Icons.directions_boat),
   const Choice(title: 'BUS', icon: Icons.directions_bus),
   const Choice(title: 'TRAIN', icon: Icons.directions_railway),
   const Choice(title: 'WALK', icon: Icons.directions_walk),
-];
+*/];
+
+
 
 class ChoiceCard extends StatelessWidget {
+  // ChoiceCard ist ein Widget welches eine Card zurückgibt,
+  // über den Key ist die getätigte Auswahl ermittelbar
   const ChoiceCard({Key key, this.choice}) : super(key: key);
 
   final Choice choice;
 
   @override
   Widget build(BuildContext context) {
+    // Hier choice ausgeben auf Konsole, als TEST und Hintergrundfarbe ändern
+    var cardBgColor;
+    print('Key ist ${this.choice.title}');
+    if (this.choice.title == 'CAR') cardBgColor =  Colors.lime[100];
+    else cardBgColor = Colors.green;
+    // .
     final TextStyle textStyle = Theme.of(context).textTheme.headline4;
     return Card(
-      color: Colors.white,
+      color: cardBgColor /*Colors.white*/,
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
+          // Hier statt default <Widget> etwas anderes zurückgeben?
           children: <Widget>[
             Icon(choice.icon, size: 128.0, color: textStyle.color),
             Text(choice.title, style: textStyle),
+            Text(choice.testTitle2, style: textStyle)  // TEST mit ausgebautem ChoiceCard
           ],
         ),
       ),
